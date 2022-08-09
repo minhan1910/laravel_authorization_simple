@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return User::whereId($id)->update($newUser);
     }
+
+    public function deleteUser($id)
+    {
+        return User::whereId($id)->delete();
+    }
 }

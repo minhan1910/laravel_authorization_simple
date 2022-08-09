@@ -80,6 +80,14 @@ class UserController extends Controller
 
     public function delete(User $user)
     {
+        $msg = 'không thể xóa người dùng này';
+
+        if (Auth::user()->id !== $user->id) {
+            $this->user->deleteUser($user->id);
+            $msg = 'Xóa người dùng thành công';
+        }
+
+        return redirect()->route('admin.users.index')->with('msg', $msg);
     }
 
     private function getDataUserFromRequest(Request $request)

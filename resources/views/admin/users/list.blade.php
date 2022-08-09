@@ -38,8 +38,10 @@
                             <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-warning">Sửa</a>
                         </td>
                         <td>
-                            <a onclick="return confirm('Bạn có chắc chắn');" href="{{ route('admin.users.delete', $user) }}"
-                                class="btn btn-danger">Xóa</a>
+                            @if (Auth::user()->id !== $user->id)
+                                <a onclick="return confirm('Bạn có chắc chắn');"
+                                    href="{{ route('admin.users.delete', $user) }}" class="btn btn-danger">Xóa</a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
