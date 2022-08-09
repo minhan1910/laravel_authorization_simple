@@ -35,7 +35,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
         Route::get('/add', [PostController::class, 'index'])->name('add');
     });
 
-    // Posts
+    // Groups
     Route::prefix('groups')->name('groups.')->group(function () {
         Route::get('/', [GroupController::class, 'index'])->name('index');
         Route::get('/add', [GroupController::class, 'index'])->name('add');
@@ -44,7 +44,11 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     // Users
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
-        Route::get('/add', [UserController::class, 'index'])->name('add');
+        Route::get('/add', [UserController::class, 'add'])->name('add');
+        Route::post('/add', [UserController::class, 'postAdd']);
+        Route::get('/edit/{user}', [UserController::class, 'edit'])->name('edit');
+        Route::post('/edit/{user}', [UserController::class, 'postEdit']);
+        Route::post('/delete/{user}', [UserController::class, 'delete'])->name('delete');
     });
 
     Route::post('/logout', function () {
