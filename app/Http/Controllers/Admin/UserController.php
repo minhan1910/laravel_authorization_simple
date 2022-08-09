@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Models\Groups;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,6 +12,13 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    protected $user = null;
+
+    public function __construct()
+    {
+        $this->user = new User;
+    }
+
     public function index()
     {
         // không nên dùng all
@@ -18,56 +26,90 @@ class UserController extends Controller
         return view('admin.users.list', compact('list'));
     }
 
-    public function add()
+    public function add(Request $request)
     {
         $groups = Groups::all();
+
+        $this->setSession($request, 'passwordRequiredRule', 'required');
+
         return view('admin.users.add', compact('groups'));
     }
 
-    public function postAdd(Request $request)
+    public function postAdd(UserRequest $request)
     {
-        $request->validate(
-            [
-                'name'      => 'required',
-                'email'     => 'required|email|unique:users,email',
-                'password'  => 'required',
-                'group_id'  => ['required', function ($attribute, $value, $fail) {
-                    if ($value === '0') $fail('Vui lòng chọn nhóm');
-                }]
-            ],
-            [
-                'name.required'     => 'Tên không được để trống',
-                'email.required'    => 'Email không được để trống',
-                'email.email'       => 'Email không đúng định dạng',
-                'email.unique'      => 'Email đã có người sử dụng',
-                'password.required' => 'Mật khẩu không được để trống',
-                'group_id.required' => 'Nhóm không được để trống',
-            ]
-        );
-
-        $user = new User;
-        $user->name     = $request->name;
-        $user->email    = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->group_id = $request->group_id;
-        $user->user_id  = Auth::user()->id;
-        $user->save();
+        $this
+            ->getDataUserFromRequest($request)
+            ->save();
 
         return redirect()
             ->route('admin.users.index')
             ->with('msg', 'Thêm người dùng thành công');
     }
 
-    public function edit(User $user)
+    public function edit(Request $request, User $user)
     {
-        return view('admin.users.edit');
+        $groups = Groups::all();
+
+        $this->setSession($request, 'id', $user->id);
+
+        return view('admin.users.edit', compact('groups', 'user'));
     }
 
-    public function postEdit(User $user)
+    public function postEdit(UserRequest $request)
     {
+        $id = session('id');
+
+        if (!$id)
+            return back()->with('msg', 'Liên kết không tồn tại');
+
+        $password = $this->setUserPassword($request, $id);
+
+        $newUser = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $password,
+            'group_id' => $request->group_id,
+            'user_id' => Auth::user()->id,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $this->user->updateUser($newUser, $id);
+
+        return back()->with('msg', 'Cập nhật người dùng thành công');
     }
 
     public function delete(User $user)
     {
+    }
+
+    private function getDataUserFromRequest(Request $request)
+    {
+        $user = new User;
+
+        $user->name     = $request->name;
+        $user->email    = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->group_id = $request->group_id;
+        $user->user_id  = Auth::user()->id;
+
+        return $user;
+    }
+
+    private function setSession(Request $request, $key, $value)
+    {
+        return $request->session()->put($key, $value);
+    }
+
+    private function setUserPassword(Request $request, $id)
+    {
+        $user = User::find($id);
+        $requestPassword = $request->password;
+        $userPassword = $user->password;
+        return $this->hasPasswordFromRequest($request) ? $userPassword :  Hash::make($requestPassword);
+    }
+
+    private function hasPasswordFromRequest(Request $request)
+    {
+        return !empty($request->password);
     }
 }

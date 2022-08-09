@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Groups::class);
     }
+
+    public function updateUser($newUser, $id)
+    {
+        return User::whereId($id)->update($newUser);
+    }
 }
