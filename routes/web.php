@@ -38,11 +38,13 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     // Groups
     Route::prefix('groups')->name('groups.')->group(function () {
         Route::get('/', [GroupController::class, 'index'])->name('index');
-        Route::get('/add', [GroupController::class, 'index'])->name('add');
+        Route::get('/add', [GroupController::class, 'add'])->name('add');
         Route::post('/add', [GroupController::class, 'postAdd']);
-        Route::get('/edit/{post}', [GroupController::class, 'edit'])->name('edit');
+        Route::get('/edit/{group}', [GroupController::class, 'edit'])->name('edit');
         Route::post('/edit/update', [GroupController::class, 'postEdit'])->name('group-edit');
-        Route::get('/delete/{post}', [GroupController::class, 'delete'])->name('delete');
+        Route::get('/delete/{group}', [GroupController::class, 'delete'])->name('delete');
+        Route::get('/permission/{group}', [GroupController::class, 'permission'])->name('permission');
+        Route::post('/permission/{group}', [GroupController::class, 'postPermission']);
     });
 
     // Users

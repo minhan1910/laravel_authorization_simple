@@ -36,7 +36,9 @@
                             {{ !empty($group->postBy->name) ? $group->postBy->name : false }}
                         </td>
                         <td>
-                            <a href="#" class="btn btn-primary form-control">Phân quyền</a>
+                            <a href="{{ route('admin.groups.permission', $group) }}"
+                                class="btn btn-primary form-control">Phân
+                                quyền</a>
                         </td>
                         <td>
                             <a href="{{ route('admin.groups.edit', $group) }}" class="btn btn-warning">Sửa</a>

@@ -14,7 +14,7 @@ class Groups extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'group_id', 'id');
     }
 
     public function postBy()

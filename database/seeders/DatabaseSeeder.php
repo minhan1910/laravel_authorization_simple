@@ -19,37 +19,58 @@ class DatabaseSeeder extends Seeder
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
-        $groupId = DB::table('groups')->insertGetId([
-            'name' => 'Administrator',
-            'user_id' => 0,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
-        ]);
+        // $groupId = DB::table('groups')->insertGetId([
+        //     'name' => 'Administrator',
+        //     'user_id' => 0,
+        //     'created_at' => date('Y-m-d H:i:s'),
+        //     'updated_at' => date('Y-m-d H:i:s')
+        // ]);
 
-        if ($groupId > 0) {
-            $userId = DB::table('users')->insertGetId([
-                'name' => 'Min An',
-                'email' => 'annogo123@gmail.com',
-                'password' => Hash::make('123456'),
-                'group_id' => $groupId,
-                'user_id' => 0,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ]);
+        // if ($groupId > 0) {
+        //     $userId = DB::table('users')->insertGetId([
+        //         'name' => 'Min An',
+        //         'email' => 'annogo123@gmail.com',
+        //         'password' => Hash::make('123456'),
+        //         'group_id' => $groupId,
+        //         'user_id' => 0,
+        //         'created_at' => date('Y-m-d H:i:s'),
+        //         'updated_at' => date('Y-m-d H:i:s')
+        //     ]);
 
-            if ($userId > 0) {
-                for ($i = 1; $i <= 5; ++$i) {
-                    DB::table('posts')->insertGetId([
-                        'title' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
-                        'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
-                        'user_id' => $userId,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'updated_at' => date('Y-m-d H:i:s')
-                    ]);
-                }
-            }
-        }
+        //     if ($userId > 0) {
+        //         for ($i = 1; $i <= 5; ++$i) {
+        //             DB::table('posts')->insertGetId([
+        //                 'title' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
+        //                 'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
+        //                 'user_id' => $userId,
+        //                 'created_at' => date('Y-m-d H:i:s'),
+        //                 'updated_at' => date('Y-m-d H:i:s')
+        //             ]);
+        //         }
+        //     }
+        // }
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+        DB::table('modules')->insert([
+            'name' => 'users',
+            'title' => 'Quản lý người dùng',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        DB::table('modules')->insert([
+            'name' => 'groups',
+            'title' => 'Quản lý nhóm',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        DB::table('modules')->insert([
+            'name' => 'posts',
+            'title' => 'Quản lý bài viết',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
     }
 }
