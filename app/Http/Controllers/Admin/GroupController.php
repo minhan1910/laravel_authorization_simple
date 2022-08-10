@@ -14,7 +14,8 @@ class GroupController extends Controller
     public function index()
     {
         $list = Groups::all();
-        return view('admin.groups.list', compact('list'));
+        $moduleList = Modules::all();
+        return view('admin.groups.list', compact('list', 'moduleList'));
     }
 
     public function add()
