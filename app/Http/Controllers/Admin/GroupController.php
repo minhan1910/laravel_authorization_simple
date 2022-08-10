@@ -51,6 +51,7 @@ class GroupController extends Controller
     public function postEdit(Request $request)
     {
         $groupId = session('groupId');
+
         $request->validate(
             [
                 'name' => 'required|unique:groups,name,' . $groupId,
