@@ -32,7 +32,11 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     // Posts
     Route::prefix('posts')->name('posts.')->group(function () {
         Route::get('/', [PostController::class, 'index'])->name('index');
-        Route::get('/add', [PostController::class, 'index'])->name('add');
+        Route::get('/add', [PostController::class, 'add'])->name('add');
+        Route::post('/add', [PostController::class, 'postAdd']);
+        Route::get('/edit/{post}', [PostController::class, 'edit'])->name('edit');
+        Route::post('/edit/update', [PostController::class, 'postEdit']);
+        Route::post('/delete/{post}', [PostController::class, 'delete'])->name('delete');
     });
 
     // Groups

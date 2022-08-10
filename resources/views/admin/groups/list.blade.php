@@ -44,10 +44,8 @@
                             <a href="{{ route('admin.groups.edit', $group) }}" class="btn btn-warning">Sửa</a>
                         </td>
                         <td>
-                            {{-- @if (Auth::user()->id !== $group->id) --}}
                             <a onclick="return confirm('Bạn có chắc chắn');"
                                 href="{{ route('admin.groups.delete', $group) }}" class="btn btn-danger">Xóa</a>
-                            {{-- @endif --}}
                         </td>
                     </tr>
                 @endforeach
